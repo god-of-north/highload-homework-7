@@ -1,9 +1,28 @@
--- Tit Petric, Monotek d.o.o., Thu 27 Oct 2016 10:43:38 AM CEST
---
--- Delete nginx cached assets with a PURGE request against an endpoint
---
--- https://scene-si.org/2016/11/02/purging-cached-items-from-nginx-with-lua/
---
+-- local md5 = {
+--   _VERSION     = "md5.lua 1.1.0",
+--   _DESCRIPTION = "MD5 computation in Lua (5.1-3, LuaJIT)",
+--   _URL         = "https://github.com/kikito/md5.lua",
+--   _LICENSE     = [[
+--     MIT LICENSE
+--     Copyright (c) 2013 Enrique García Cota + Adam Baldwin + hanzao + Equi 4 Software
+--     Permission is hereby granted, free of charge, to any person obtaining a
+--     copy of this software and associated documentation files (the
+--     "Software"), to deal in the Software without restriction, including
+--     without limitation the rights to use, copy, modify, merge, publish,
+--     distribute, sublicense, and/or sell copies of the Software, and to
+--     permit persons to whom the Software is furnished to do so, subject to
+--     the following conditions:
+--     The above copyright notice and this permission notice shall be included
+--     in all copies or substantial portions of the Software.
+--     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+--     OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+--     MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+--     IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+--     CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+--     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+--     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+--   ]]
+-- }
 
 
 local char, byte, format, rep, sub =
@@ -374,6 +393,14 @@ end
 -------------------------------------------------------------
 -------------------------------------------------------------
 
+-- Tit Petric, Monotek d.o.o., Thu 27 Oct 2016 10:43:38 AM CEST
+--
+-- Delete nginx cached assets with a PURGE request against an endpoint
+--
+-- https://scene-si.org/2016/11/02/purging-cached-items-from-nginx-with-lua/
+--
+
+
 function file_exists(name)
         local f = io.open(name, "r")
         if f~=nil then io.close(f) return true else return false end
@@ -423,8 +450,8 @@ function purge(filename)
 end
 
 if ngx ~= nil then
-        -- local cache_key = ngx.var.lua_purge_upstream .. ngx.var.request_uri
-		local cache_key = ngx.var.lua_purge_upstream .. ngx.var.uri
+        local cache_key = ngx.var.lua_purge_upstream .. ngx.var.request_uri
+		-- local cache_key = ngx.var.lua_purge_upstream .. ngx.var.uri
 		cache_key = cache_key:sub(18)
         local filename = cache_filename(ngx.var.lua_purge_path, ngx.var.lua_purge_levels, cache_key)
         purge(filename)
