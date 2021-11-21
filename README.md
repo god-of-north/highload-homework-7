@@ -34,7 +34,7 @@ docker-compose up -d
 
 Getting files
 ```
-> curl -D - -X GET http://localhost:1337/test/hello.txt
+> curl -D - -X GET http://localhost:1337/test/hello.jpg
 
 HTTP/1.1 200 OK
 Server: nginx/1.21.4
@@ -55,7 +55,7 @@ X-Cache-Status: MISS
 ██║  ██║███████╗███████╗███████╗╚██████╔╝
 ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝ ╚═════╝
 
->curl -D - -X GET http://localhost:1337/test/world.txt
+>curl -D - -X GET http://localhost:1337/test/world.jpg
 
 HTTP/1.1 200 OK
 Server: nginx/1.21.4
@@ -80,7 +80,7 @@ X-Cache-Status: MISS
 
 Checking is it cached by header flag
 ```
->curl -D - -X GET http://localhost:1337/test/hello.txt
+>curl -D - -X GET http://localhost:1337/test/hello.jpg
 
 HTTP/1.1 200 OK
 Server: nginx/1.21.4
@@ -104,12 +104,12 @@ X-Cache-Status: HIT
 
 Reset the cache item for **hello.txt**
 ```
-curl -D - -X PURGE http://localhost:1337/test/hello.txt
+curl -D - -X PURGE http://localhost:1337/test/hello.jpg
 ```
 
 Getting files to check caching flags
 ```
->curl -D - -X GET http://localhost:1337/test/hello.txt
+>curl -D - -X GET http://localhost:1337/test/hello.jpg
 
 HTTP/1.1 200 OK
 Server: nginx/1.21.4
@@ -130,7 +130,7 @@ X-Cache-Status: MISS
 ██║  ██║███████╗███████╗███████╗╚██████╔╝
 ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝ ╚═════╝
 
->curl -D - -X GET http://localhost:1337/test/world.txt
+>curl -D - -X GET http://localhost:1337/test/world.jpg
 
 HTTP/1.1 200 OK
 Server: nginx/1.21.4
@@ -150,4 +150,45 @@ X-Cache-Status: HIT
 ██║███╗██║██║   ██║██╔══██╗██║     ██║  ██║
 ╚███╔███╔╝╚██████╔╝██║  ██║███████╗██████╔╝
  ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═════╝
+```
+
+
+Files that do not mach the image extension filter will not be cached.
+```
+>curl -D - -X GET http://localhost:1337/test/planet.txt
+
+HTTP/1.1 200 OK
+Server: nginx/1.21.4
+Date: Sun, 21 Nov 2021 18:32:33 GMT
+Content-Type: text/plain; charset=utf-8
+Content-Length: 1008
+Connection: keep-alive
+Last-Modified: Wed, 17 Nov 2021 19:23:54 GMT
+Cache-Control: public, max-age=43200
+Expires: Mon, 22 Nov 2021 06:32:33 GMT
+ETag: "1637177034.7351947-1008-558698196"
+
+              _-o#&&*''''?d:>b\_
+          _o/"`''  '',, dMF9MMMMMHo_
+       .o&#'        `"MbHMMMMMMMMMMMHo.
+     .o"" '         vodM*$&&HMMMMMMMMMM?.
+    ,'              $M&ood,~'`(&##MMMMMMH\
+   /               ,MMMMMMM#b?#bobMMMMHMMML
+  &              ?MMMMMMMMMMMMMMMMM7MMM$R*Hk
+ ?$.            :MMMMMMMMMMMMMMMMMMM/HMMM|`*L
+|               |MMMMMMMMMMMMMMMMMMMMbMH'   T,
+$H#:            `*MMMMMMMMMMMMMMMMMMMMb#}'  `?
+]MMH#             ""*""""*#MMMMMMMMMMMMM'    -
+MMMMMb_                   |MMMMMMMMMMMP'     :
+HMMMMMMMHo                 `MMMMMMMMMT       .
+?MMMMMMMMP                  9MMMMMMMM}       -
+-?MMMMMMM                  |MMMMMMMMM?,d-    '
+ :|MMMMMM-                 `MMMMMMMT .M|.   :
+  .9MMM[                    &MMMMM*' `'    .
+   :9MMk                    `MMM#"        -
+     &M}                     `          .-
+      `&.                             .
+        `~,   .                     ./
+            . _                  .-
+              '`--._,dd###pp=""'
 ```
